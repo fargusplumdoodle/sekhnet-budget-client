@@ -5,16 +5,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 var data = {
-  'total': 2500,
+  'total': 25000,
   'coast_time': 3,
   'debt': 5,
   'budgets': [
-    BudgetModel(1, 'food', 3000, 15, 9),
-    BudgetModel(2, 'housing', 1300, 12, 9),
-    BudgetModel(3, 'medical', 2440, 12, 9),
-    BudgetModel(4, 'savings', 3240, 12, 9),
+    BudgetModel(1, 'food', 30, 1005, 9),
+    BudgetModel(2, 'housing', 10, 12, 9),
+    BudgetModel(3, 'medical', 20, 102, 9),
+    BudgetModel(4, 'savings', 30, 1002, 9),
     BudgetModel(5, 'comic books', 3440, 12, 9),
-    BudgetModel(6, 'debt', 1240, 12, 9),
+    BudgetModel(6, 'debt', 12, 1200, 9),
+    BudgetModel(7, 'transportation', 3440, 12, 9),
+    BudgetModel(8, 'eyy', 12, 1200, 9),
   ]
 };
 
@@ -42,14 +44,14 @@ class Dashboard extends StatelessWidget {
                     child: ListTile(
                         title: Text(
                           'Dashboard',
-                          style: TextStyle(fontSize: 30),
+                          style: TextStyle(fontSize: 26),
                         ),
                         subtitle: Text(
                             'Coast time: ${data['coast_time']} months\nDebt: ${data['debt']}\$'))),
                 Expanded(
                     child: Text(
                   '${data["total"]}\$',
-                  style: TextStyle(fontSize: 54),
+                  style: TextStyle(fontSize: 46),
                 ))
               ],
             )),

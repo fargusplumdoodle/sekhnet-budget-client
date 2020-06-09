@@ -1,16 +1,54 @@
 import 'package:budget/model/budget.dart';
 import 'package:budget/ui/widgets/base.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class BudgetDetail extends StatelessWidget {
   static const routeName = 'budget_detail';
+  static const double h1 = 60;
+  static const double h2 = 40;
   @override
   Widget build(BuildContext context) {
     final BudgetModel budget = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
       appBar: Base.appBar(),
-      body: Center(child: Text(budget.name)),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  budget.name,
+                  style: TextStyle(fontSize: h1),
+                ),
+              ),
+            ),
+            Card(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Text(
+                      '${budget.percentage}%',
+                      style: TextStyle(fontSize: h2),
+                    )),
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text(
+                    '${budget.balance}\$',
+                    style: TextStyle(fontSize: h2),
+                  ),
+                )
+              ],
+            ))
+          ],
+        ),
+      ),
     );
   }
 }
