@@ -1,4 +1,7 @@
 import 'package:budget/model/budget.dart';
+import 'package:budget/ui/screens/budget_detail.dart';
+import 'package:budget/ui/widgets/base.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 var data = {
@@ -6,9 +9,9 @@ var data = {
   'coast_time': 3,
   'debt': 5,
   'budgets': [
-    BudgetModel(1, 'food', 30, 15, 9),
-    BudgetModel(2, 'housing', 300, 12, 9),
-    BudgetModel(3, 'medical', 440, 12, 9),
+    BudgetModel(1, 'food', 3000, 15, 9),
+    BudgetModel(2, 'housing', 1300, 12, 9),
+    BudgetModel(3, 'medical', 2440, 12, 9),
     BudgetModel(4, 'savings', 3240, 12, 9),
     BudgetModel(5, 'comic books', 3440, 12, 9),
     BudgetModel(6, 'debt', 1240, 12, 9),
@@ -16,46 +19,41 @@ var data = {
 };
 
 class Dashboard extends StatelessWidget {
+  static const routeName = '/';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Sekhnet Budget'),
-      ),
-      drawer: Drawer(
-        child: Center(child: Text('in da drawer')),
-      ),
+      appBar: Base.appBar(),
+      drawer: Base.drawer(),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Add transaction',
         child: Icon(Icons.add),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: ListView(
+      body: Container(
+        padding: EdgeInsets.all(8.8),
+        child: Column(
           children: <Widget>[
             Card(
-                child: Padding(
-              padding: const EdgeInsets.all(13.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Expanded(
-                      child: ListTile(
-                          title: Text(
-                            'Dashboard',
-                            style: TextStyle(fontSize: 30),
-                          ),
-                          subtitle: Text(
-                              'Coast time: ${data['coast_time']} months\nDebt: ${data['debt']}\$'))),
-                  Expanded(
-                      child: Text(
-                    '${data["total"]}\$',
-                    style: TextStyle(fontSize: 54),
-                  ))
-                ],
-              ),
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Expanded(
+                    child: ListTile(
+                        title: Text(
+                          'Dashboard',
+                          style: TextStyle(fontSize: 30),
+                        ),
+                        subtitle: Text(
+                            'Coast time: ${data['coast_time']} months\nDebt: ${data['debt']}\$'))),
+                Expanded(
+                    child: Text(
+                  '${data["total"]}\$',
+                  style: TextStyle(fontSize: 54),
+                ))
+              ],
             )),
-            buildBudgetDashboard(data['budgets'])
+            Expanded(child: buildBudgetDashboard(data['budgets']))
           ],
         ),
       ),
@@ -69,10 +67,26 @@ class Dashboard extends StatelessWidget {
         gridDelegate:
             new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
-          return Card(
-            child: Center(
-                child: Text(
-                    '${budgets[index].name}\n${budgets[index].balance}\$')),
+          return GestureDetector(
+            onTap: () => {
+              Navigator.pushNamed(context, BudgetDetail.routeName,
+                  arguments: budgets[index])
+            },
+            child: Card(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text('${budgets[index].name}',
+                        style: TextStyle(fontSize: 30)),
+                  ),
+                  Text('${budgets[index].balance}\$',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+                ],
+              ),
+            ),
           );
         });
   }
