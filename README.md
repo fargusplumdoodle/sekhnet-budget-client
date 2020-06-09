@@ -13,3 +13,6 @@ API Compatibility: v1.1
 currently does not contain any way of creating budgets or modifying existing budgets
 
 For now this is built with non destructive actions only
+
+**note 2**
+This is my first full flutter app. Hopefully it works out
