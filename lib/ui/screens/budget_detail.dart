@@ -1,11 +1,12 @@
 import 'package:budget/model/budget.dart';
 import 'package:budget/ui/widgets/base.dart';
+import 'package:budget/ui/widgets/transaction_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class BudgetDetail extends StatelessWidget {
   static const routeName = 'budget_detail';
-  static const double h1 = 60;
+  static const double h1 = 55;
   static const double h2 = 40;
   @override
   Widget build(BuildContext context) {
@@ -28,24 +29,29 @@ class BudgetDetail extends StatelessWidget {
               ),
             ),
             Card(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Padding(
+                child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Text(
+                        '${budget.percentage}%',
+                        style: TextStyle(fontSize: h2),
+                      )),
+                  Padding(
                     padding: EdgeInsets.all(8),
                     child: Text(
-                      '${budget.percentage}%',
+                      '${budget.balance}\$',
                       style: TextStyle(fontSize: h2),
-                    )),
-                Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Text(
-                    '${budget.balance}\$',
-                    style: TextStyle(fontSize: h2),
-                  ),
-                )
-              ],
-            ))
+                    ),
+                  )
+                ],
+              ),
+            )),
+            Divider(),
+            Expanded(child: TransactionList(budget, 10, false))
           ],
         ),
       ),

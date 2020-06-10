@@ -1,6 +1,6 @@
 import 'package:budget/model/budget.dart';
-import 'package:budget/ui/screens/budget_detail.dart';
 import 'package:budget/ui/widgets/base.dart';
+import 'package:budget/ui/widgets/dashboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,11 +12,11 @@ var data = {
     BudgetModel(1, 'food', 30, 1005, 9),
     BudgetModel(2, 'housing', 10, 12, 9),
     BudgetModel(3, 'medical', 20, 102, 9),
-    BudgetModel(4, 'savings', 30, 1002, 9),
     BudgetModel(5, 'comic books', 3440, 12, 9),
-    BudgetModel(6, 'debt', 12, 1200, 9),
+    BudgetModel(8, 'oh yea', 12, 1234569, 9),
     BudgetModel(7, 'transportation', 3440, 12, 9),
-    BudgetModel(8, 'eyy', 12, 1200, 9),
+    BudgetModel(4, 'savings', 30, 1002, 9),
+    BudgetModel(6, 'debt', 12, 1200, 9),
   ]
 };
 
@@ -60,36 +60,5 @@ class Dashboard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget buildBudgetDashboard(List<BudgetModel> budgets) {
-    return GridView.builder(
-        itemCount: budgets.length,
-        shrinkWrap: true,
-        gridDelegate:
-            new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () => {
-              Navigator.pushNamed(context, BudgetDetail.routeName,
-                  arguments: budgets[index])
-            },
-            child: Card(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text('${budgets[index].name}',
-                        style: TextStyle(fontSize: 30)),
-                  ),
-                  Text('${budgets[index].balance}\$',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
-                ],
-              ),
-            ),
-          );
-        });
   }
 }
