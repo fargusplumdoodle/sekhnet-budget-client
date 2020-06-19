@@ -38,3 +38,7 @@ class BudgetModel {
     _name = value;
   }
 }
+
+List<String> get_temp_budget_names() {
+  return ['food', 'housing', 'personal'];
+}

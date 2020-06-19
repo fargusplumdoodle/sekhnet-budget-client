@@ -28,10 +28,7 @@ class Dashboard extends StatelessWidget {
     return Scaffold(
       appBar: Base.appBar(),
       drawer: Base.drawer(),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Add transaction',
-        child: Icon(Icons.add),
-      ),
+      floatingActionButton: Base.floatingActionButton(context),
       body: Container(
         padding: EdgeInsets.all(8.8),
         child: Column(

@@ -1,3 +1,4 @@
+import 'package:budget/ui/screens/add_transaction.dart';
 import 'package:budget/ui/screens/budget_detail.dart';
 import 'package:budget/ui/screens/dashboard.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +16,11 @@ class MyApp extends StatelessWidget {
       routes: {
         Dashboard.routeName: (context) => Dashboard(),
         BudgetDetail.routeName: (context) => BudgetDetail(),
+        AddTransactionForm.routeName: (context) => AddTransactionForm()
       },
-      title: 'Flutter Demo',
+      title: 'Sekhnet Budget',
       theme: ThemeData.dark(),
-      darkTheme:
-          ThemeData(primaryColor: Colors.blue, brightness: Brightness.light),
+      darkTheme: ThemeData(brightness: Brightness.dark),
     );
   }
 }
