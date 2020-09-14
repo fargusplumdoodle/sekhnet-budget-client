@@ -1,4 +1,6 @@
-class BudgetModel {
+import 'package:equatable/equatable.dart';
+
+class BudgetModel extends Equatable {
   int _id;
   String _name;
   int _percentage;
@@ -36,6 +38,18 @@ class BudgetModel {
 
   set name(String value) {
     _name = value;
+  }
+
+  @override
+  List<Object> get props => [_id, _name, _percentage, _balance, _init_balance];
+
+  static BudgetModel fromJSON(dynamic json) {
+    return BudgetModel(
+        json["id"],
+        json["name"],
+        (json["percentage"] * 100).toInt(),
+        double.parse(json["balance"]).toInt(),
+        json["initial_balance"].toInt());
   }
 }
 

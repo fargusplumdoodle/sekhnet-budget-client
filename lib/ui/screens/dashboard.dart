@@ -1,61 +1,49 @@
-import 'package:budget/model/budget.dart';
+import 'package:budget/blocs/blocs.dart';
+import 'package:budget/repositories/repositories.dart';
 import 'package:budget/ui/widgets/base.dart';
 import 'package:budget/ui/widgets/dashboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-var data = {
-  'total': 25000,
-  'coast_time': 3,
-  'debt': 5,
-  'budgets': [
-    BudgetModel(1, 'food', 30, 1005, 9),
-    BudgetModel(2, 'housing', 10, 12, 9),
-    BudgetModel(3, 'medical', 20, 102, 9),
-    BudgetModel(5, 'comic books', 3440, 12, 9),
-    BudgetModel(8, 'oh yea', 12, 1234569, 9),
-    BudgetModel(7, 'transportation', 3440, 12, 9),
-    BudgetModel(4, 'savings', 30, 1002, 9),
-    BudgetModel(6, 'debt', 12, 1200, 9),
-  ]
-};
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 
 class Dashboard extends StatelessWidget {
   static const routeName = '/';
+  var _budgetRepo = BudgetRepository(
+      budgetApiClient: BudgetApiClient(httpClient: http.Client()));
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Base.appBar(),
-      drawer: Base.drawer(),
-      floatingActionButton: Base.floatingActionButton(context),
-      body: Container(
-        padding: EdgeInsets.all(8.8),
-        child: Column(
-          children: <Widget>[
-            Card(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Expanded(
-                    child: ListTile(
-                        title: Text(
-                          'Dashboard',
-                          style: TextStyle(fontSize: 26),
-                        ),
-                        subtitle: Text(
-                            'Coast time: ${data['coast_time']} months\nDebt: ${data['debt']}\$'))),
-                Expanded(
-                    child: Text(
-                  '${data["total"]}\$',
-                  style: TextStyle(fontSize: 46),
-                ))
-              ],
-            )),
-            Expanded(child: buildBudgetDashboard(data['budgets']))
-          ],
-        ),
-      ),
-    );
+        appBar: Base.appBar(),
+        drawer: Base.drawer(),
+        floatingActionButton: Base.floatingActionButton(context),
+        body: Container(
+            padding: EdgeInsets.all(8.8),
+            child: BlocProvider(
+                create: (context) => BudgetBloc(budgetRepository: _budgetRepo),
+                child: BlocBuilder<BudgetBloc, BudgetState>(
+                    builder: (context, state) {
+                  if (state is BudgetInitial) {
+                    BlocProvider.of<BudgetBloc>(context).add(BudgetRequested());
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (state is BudgetLoadInProgress) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+
+                  if (state is BudgetLoadSuccess) {
+                    return Column(
+                      children: <Widget>[
+                        StatusCard(state.budgets),
+                        BudgetDashboardWidget(state.budgets),
+                      ],
+                    );
+                  } else {
+                    return Center(
+                        child: Text("something went wrong!",
+                            style: TextStyle(color: Colors.red)));
+                  }
+                }))));
   }
 }

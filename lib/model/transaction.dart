@@ -1,6 +1,7 @@
 import 'package:budget/model/budget.dart';
+import 'package:equatable/equatable.dart';
 
-class TransactionModel {
+class TransactionModel extends Equatable {
   int _id;
   String _amount;
   String _description;
@@ -51,4 +52,7 @@ class TransactionModel {
       return _amount;
     }
   }
+
+  @override
+  List<Object> get props => [_id, _amount, _description, budget, _date];
 }
