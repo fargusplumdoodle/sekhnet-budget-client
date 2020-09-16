@@ -4,6 +4,7 @@ import 'package:budget/repositories/repositories.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
+// ------------------  BUDGET STATE
 abstract class BudgetState extends Equatable {
   const BudgetState();
 
@@ -26,6 +27,7 @@ class BudgetLoadSuccess extends BudgetState {
 
 class BudgetLoadFailure extends BudgetState {}
 
+// ------------------  BUDGET EVENT
 abstract class BudgetEvent extends Equatable {
   const BudgetEvent();
 }
@@ -37,6 +39,7 @@ class BudgetRequested extends BudgetEvent {
   List<Object> get props => throw [];
 }
 
+// ------------------  BUDGET BLOC
 class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
   final BudgetRepository budgetRepository;
 

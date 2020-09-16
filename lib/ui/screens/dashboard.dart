@@ -28,6 +28,7 @@ class Dashboard extends StatelessWidget {
                     BlocProvider.of<BudgetBloc>(context).add(BudgetRequested());
                     return Center(child: CircularProgressIndicator());
                   }
+
                   if (state is BudgetLoadInProgress) {
                     return Center(child: CircularProgressIndicator());
                   }
@@ -41,7 +42,7 @@ class Dashboard extends StatelessWidget {
                     );
                   } else {
                     return Center(
-                        child: Text("something went wrong!",
+                        child: Text("Unable to fetch budgets",
                             style: TextStyle(color: Colors.red)));
                   }
                 }))));

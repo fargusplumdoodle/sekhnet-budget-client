@@ -1,3 +1,4 @@
+import 'package:budget/globals.dart';
 import 'package:equatable/equatable.dart';
 
 class BudgetModel extends Equatable {
@@ -50,6 +51,15 @@ class BudgetModel extends Equatable {
         (json["percentage"] * 100).toInt(),
         double.parse(json["balance"]).toInt(),
         json["initial_balance"].toInt());
+  }
+
+  static BudgetModel getBudgetFromId(int id) {
+    for (var i = 0; i < budgetStorage.length; i++) {
+      if (budgetStorage[i].id == id) {
+        return budgetStorage[i];
+      }
+    }
+    return null;
   }
 }
 

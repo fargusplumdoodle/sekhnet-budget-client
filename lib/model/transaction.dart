@@ -53,6 +53,15 @@ class TransactionModel extends Equatable {
     }
   }
 
+  static TransactionModel fromJSON(dynamic json) {
+    return TransactionModel(
+        json["id"],
+        json["amount"].toString(),
+        json["description"],
+        BudgetModel.getBudgetFromId(json["budget"]),
+        json["date"]);
+  }
+
   @override
   List<Object> get props => [_id, _amount, _description, budget, _date];
 }

@@ -1,3 +1,5 @@
+import 'model/budget.dart';
+
 const String API_HOST = "http://172.19.0.3:8000/api/v1";
 const String USERNAME = "dev";
 const String PASSWORD = "dev";
@@ -12,3 +14,5 @@ class Style {
   static const double h1 = 55;
   static const double h2 = 40;
 }
+
+List<BudgetModel> budgetStorage;
