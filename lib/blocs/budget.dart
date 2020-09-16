@@ -55,7 +55,8 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
       try {
         final List<BudgetModel> budgets = await budgetRepository.getBudgets();
         yield BudgetLoadSuccess(budgets: budgets);
-      } catch (_) {
+      } catch (e) {
+        print('Failed to get budgets:' + e.toString());
         yield BudgetLoadFailure();
       }
     }

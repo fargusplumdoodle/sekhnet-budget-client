@@ -32,7 +32,7 @@ class BudgetApiClient {
 
   Future<List<BudgetModel>> getBudgets() async {
     final url = '$API_HOST/budget';
-
+    print(headers);
     final response = await this.httpClient.get(url, headers: headers);
     if (response.statusCode != 200) {
       throw Exception('error getting budget list');

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:budget/repositories/account.dart';
 import 'package:budget/simple_bloc_observer.dart';
 import 'package:budget/ui/screens/add_transaction.dart';
 import 'package:budget/ui/screens/budget_detail.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 void main() {
   Bloc.observer = SimpleBlocObserver();
 
-  runApp(MyApp());
+  login().then((success) => runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {

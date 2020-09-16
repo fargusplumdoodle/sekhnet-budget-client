@@ -1,18 +1,14 @@
 # Sekhnet Budget Client
+***IN DEVELOPMENT***
 v0.1
-
 
 A client for the Sekhnet Budget API
 
-The APi can be found here:
+The API can be found here:
 https://github.com/fargusplumdoodle/budget
 
 API Compatibility: v1.1
 
 **note**
-currently does not contain any way of creating budgets or modifying existing budgets
-
-For now this is built with non destructive actions only
-
-**note 2**
-This is my first full flutter app. Hopefully it works out
+This is my first full flutter app. Likely I will look back on this and find many things I should
+have done better
