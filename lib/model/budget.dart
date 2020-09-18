@@ -27,6 +27,9 @@ class BudgetModel extends Equatable {
 
   int get balance => _balance;
 
+  String get pretty_balance => (_balance / 100).floor().toString();
+  String get pretty_initial_balance => (_init_balance / 100).floor().toString();
+
   set balance(int value) {
     _balance = value;
   }
@@ -45,12 +48,12 @@ class BudgetModel extends Equatable {
   List<Object> get props => [_id, _name, _percentage, _balance, _init_balance];
 
   static BudgetModel fromJSON(dynamic json) {
-    return BudgetModel(
-        json["id"],
-        json["name"],
-        (json["percentage"] * 100).toInt(),
-        double.parse(json["balance"]).toInt(),
-        json["initial_balance"].toInt());
+    int id = json["id"];
+    String name = json["name"];
+    int percentage = json["percentage"];
+    int balance = (json["balance"] / 100).toInt();
+    int initial_balance = (json["initial_balance"] / 100).toInt();
+    return BudgetModel(id, name, percentage, balance, initial_balance);
   }
 
   static BudgetModel getBudgetFromId(int id) {
@@ -61,8 +64,4 @@ class BudgetModel extends Equatable {
     }
     return null;
   }
-}
-
-List<String> get_temp_budget_names() {
-  return ['food', 'housing', 'personal'];
 }

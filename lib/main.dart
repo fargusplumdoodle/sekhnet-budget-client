@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         Dashboard.routeName: (context) => Dashboard(),
         BudgetDetail.routeName: (context) => BudgetDetail(),
-        AddTransactionForm.routeName: (context) => AddTransactionForm(),
+        AddTransactionScreen.routeName: (context) => AddTransactionScreen(),
       },
       title: 'Sekhnet Budget',
       theme: ThemeData.dark(),

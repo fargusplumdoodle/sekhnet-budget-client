@@ -57,6 +57,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       try {
         final List<TransactionModel> transactions = await budgetRepository
             .getTransactions(event.budgetID, event.maxTransactions);
+
         yield TransactionLoadSuccess(transactions: transactions);
       } catch (_) {
         yield TransactionLoadFailure();

@@ -21,6 +21,6 @@ class Base {
       tooltip: 'Add transaction',
       child: Icon(Icons.add),
       onPressed: () {
-        Navigator.pushNamed(context, AddTransactionForm.routeName);
+        Navigator.pushNamed(context, AddTransactionScreen.routeName);
       });
 }

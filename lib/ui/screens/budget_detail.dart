@@ -89,7 +89,7 @@ Widget BudgetCard(BudgetModel budget) {
         Padding(
           padding: EdgeInsets.all(8),
           child: Text(
-            '${budget.balance}\$',
+            '${budget.pretty_balance}\$',
             style: TextStyle(fontSize: Style.h2),
           ),
         )

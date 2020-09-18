@@ -56,7 +56,7 @@ class TransactionModel extends Equatable {
   static TransactionModel fromJSON(dynamic json) {
     return TransactionModel(
         json["id"],
-        json["amount"].toString(),
+        (json["amount"] / 100).toString(),
         json["description"],
         BudgetModel.getBudgetFromId(json["budget"]),
         json["date"]);

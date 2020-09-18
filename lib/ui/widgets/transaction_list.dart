@@ -17,6 +17,7 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new ListView.builder(
+        shrinkWrap: true,
         itemCount: numberOfTransactions < transactions.length
             ? numberOfTransactions
             : transactions.length,
