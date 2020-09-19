@@ -1,9 +1,10 @@
+import 'package:budget/globals.dart';
 import 'package:budget/model/budget.dart';
 import 'package:equatable/equatable.dart';
 
 class TransactionModel extends Equatable {
   int _id;
-  String _amount;
+  int _amount;
   String _description;
   BudgetModel budget;
   String _date;
@@ -23,9 +24,9 @@ class TransactionModel extends Equatable {
     _description = value;
   }
 
-  String get amount => _amount;
+  int get amount => _amount;
 
-  set amount(String value) {
+  set amount(int value) {
     _amount = value;
   }
 
@@ -36,7 +37,7 @@ class TransactionModel extends Equatable {
   }
 
   String getPrettyDescription() {
-    int max = 15;
+    int max = 30;
     if (_description.length > max) {
       return _description.substring(0, max) + "...";
     } else {
@@ -44,22 +45,22 @@ class TransactionModel extends Equatable {
     }
   }
 
-  String getPrettyAmount() {
-    int max = 6;
-    if (_amount.length > max) {
-      return _amount.substring(0, max);
+  String getPrettyAmount(bool round) {
+    // convert to dollars
+    String amount = round
+        ? convertToDollars(_amount).round().toString()
+        : convertToDollars(_amount).toString();
+    int max = 12;
+    if (amount.length > max) {
+      return amount.substring(0, max);
     } else {
-      return _amount;
+      return amount;
     }
   }
 
   static TransactionModel fromJSON(dynamic json) {
-    return TransactionModel(
-        json["id"],
-        (json["amount"] / 100).toString(),
-        json["description"],
-        BudgetModel.getBudgetFromId(json["budget"]),
-        json["date"]);
+    return TransactionModel(json["id"], json["amount"], json["description"],
+        BudgetModel.getBudgetFromId(json["budget"]), json["date"]);
   }
 
   @override

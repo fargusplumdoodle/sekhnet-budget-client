@@ -25,3 +25,11 @@ BudgetModel get_budget_by_name(String name) {
   }
   return null;
 }
+
+double convertToDollars(int amount) {
+  return amount / 100;
+}
+
+int convertToCents(int amount) {
+  return amount * 100;
+}

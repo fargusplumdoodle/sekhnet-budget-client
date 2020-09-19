@@ -27,8 +27,18 @@ class BudgetModel extends Equatable {
 
   int get balance => _balance;
 
-  String get pretty_balance => (_balance / 100).floor().toString();
-  String get pretty_initial_balance => (_init_balance / 100).floor().toString();
+  String getPrettyBalance(bool round) {
+    // convert to dollars
+    String amount = round
+        ? convertToDollars(_balance).round().toString()
+        : convertToDollars(_balance).toString();
+    int max = 12;
+    if (amount.length > max) {
+      return amount.substring(0, max);
+    } else {
+      return amount;
+    }
+  }
 
   set balance(int value) {
     _balance = value;
@@ -51,9 +61,9 @@ class BudgetModel extends Equatable {
     int id = json["id"];
     String name = json["name"];
     int percentage = json["percentage"];
-    int balance = (json["balance"] / 100).toInt();
-    int initial_balance = (json["initial_balance"] / 100).toInt();
-    return BudgetModel(id, name, percentage, balance, initial_balance);
+    int balance = json["balance"];
+    int initialBalance = json["initial_balance"];
+    return BudgetModel(id, name, percentage, balance, initialBalance);
   }
 
   static BudgetModel getBudgetFromId(int id) {

@@ -64,9 +64,9 @@ class AddTransactionApiClient {
     final data = jsonDecode(response.body) as List;
 
     var transactionList = new List<TransactionModel>();
-    data.forEach((dynamic json) {
-      transactionList.add(TransactionModel.fromJSON(json));
-    });
+    for (int i = 0; i < data.length; i++) {
+      transactionList.add(TransactionModel.fromJSON(data[i]));
+    }
 
     return transactionList;
   }

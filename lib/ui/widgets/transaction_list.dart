@@ -25,7 +25,7 @@ class TransactionList extends StatelessWidget {
           return Card(
             child: ListTile(
               leading: Text(
-                transactions[index].getPrettyAmount(),
+                transactions[index].getPrettyAmount(false),
               ),
               title: Text(transactions[index].getPrettyDescription()),
               subtitle: Text(

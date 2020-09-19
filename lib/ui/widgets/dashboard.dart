@@ -1,3 +1,4 @@
+import 'package:budget/globals.dart';
 import 'package:budget/model/budget.dart';
 import 'package:budget/ui/screens/budget_detail.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ Widget BudgetDashboardWidget(List<BudgetModel> budgets) {
                     child: Text('${budgets[index].name}',
                         style: TextStyle(fontSize: 20)),
                   ),
-                  Text('${budgets[index].balance}\$',
+                  Text('${budgets[index].getPrettyBalance(true)}\$',
                       overflow: TextOverflow.fade,
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
@@ -37,18 +38,20 @@ Widget BudgetDashboardWidget(List<BudgetModel> budgets) {
 }
 
 Widget StatusCard(List<BudgetModel> budgets) {
-  int debt = 0;
-  int total = 0;
+  double debt = 0;
+  double total = 0;
 
   // Calculating status info from budgets
   budgets.forEach((element) {
-    total += element.balance;
+    total += convertToDollars(element.balance);
 
     if (element.balance < 0) {
-      debt += element.balance;
+      debt += convertToDollars(element.balance);
     }
   });
 
+  String totalPretty = total.round().toString().replaceAllMapped(
+      new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
   int coastTime = (total / 1800).round(); // todo calculate off of real data
 
   return Card(
@@ -61,11 +64,14 @@ Widget StatusCard(List<BudgetModel> budgets) {
                 'Dashboard',
                 style: TextStyle(fontSize: 26),
               ),
-              subtitle: Text('Coast time: $coastTime months\nDebt: $debt\$'))),
+              subtitle: Text(
+                'Coast time: $coastTime months\nDebt: ${debt.round()}\$',
+                style: TextStyle(fontSize: 10),
+              ))),
       Expanded(
           child: Text(
-        '$total\$',
-        style: TextStyle(fontSize: 46),
+        '${totalPretty}\$',
+        style: TextStyle(fontSize: 42),
       ))
     ],
   ));
