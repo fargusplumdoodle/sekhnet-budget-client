@@ -24,8 +24,13 @@ class TransactionList extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return Card(
             child: ListTile(
-              leading: Text(
-                transactions[index].getPrettyAmount(false),
+              leading: Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    transactions[index].getPrettyAmount(false),
+                  ),
+                ),
               ),
               title: Text(transactions[index].getPrettyDescription()),
               subtitle: Text(

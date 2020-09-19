@@ -76,10 +76,10 @@ class _AddTransactionFormWidgetState extends State<AddTransactionFormWidget> {
               hint: Text("Budget"),
               iconSize: 24,
               elevation: 16,
-              style: TextStyle(color: Colors.deepPurple),
+              style: TextStyle(color: Colors.tealAccent),
               underline: Container(
                 height: 4,
-                color: Colors.deepPurpleAccent,
+                color: Colors.tealAccent,
               ),
               isExpanded: true,
               onChanged: (String newValue) {
@@ -158,7 +158,7 @@ class _AddTransactionFormWidgetState extends State<AddTransactionFormWidget> {
       _AddTransactionFormData data, BuildContext context) {
     _formKey.currentState.save();
     // database uses cents, add positive transaction will always have the
-    // amount evaluage to postiive
+    // amount evaluates to positive
     int amount = (data.amount.abs() * 100).round();
     String date = "${data.date.year}-${data.date.month}-${data.date.day}";
 
@@ -174,7 +174,7 @@ class _AddTransactionFormWidgetState extends State<AddTransactionFormWidget> {
       _AddTransactionFormData data, BuildContext context) {
     _formKey.currentState.save();
     // database uses cents, add positive transaction will always have the
-    // amount evaluage to postiive
+    // amount evaluates to negative
     int amount = 0 - (data.amount.abs() * 100).round();
     String date = "${data.date.year}-${data.date.month}-${data.date.day}";
 
@@ -189,10 +189,11 @@ class _AddTransactionFormWidgetState extends State<AddTransactionFormWidget> {
   void addIncomeTransaction(
       _AddTransactionFormData data, BuildContext context) {
     _formKey.currentState.save();
-    print("eyy adding the income trasnsaciton eyy");
-    print(data.amount);
-    print(data.description);
-    print(data.date);
-    print(data.budget);
+    // database uses cents, add positive transaction will always have the
+    int amount = (data.amount * 100).round();
+    String date = "${data.date.year}-${data.date.month}-${data.date.day}";
+
+    BlocProvider.of<AddTransactionBloc>(context).add(AddIncomeRequested(
+        amount: amount, description: data.description, date: date));
   }
 }

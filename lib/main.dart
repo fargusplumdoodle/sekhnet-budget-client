@@ -9,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   Bloc.observer = SimpleBlocObserver();
-
   login().then((success) => runApp(MyApp()));
 }
 

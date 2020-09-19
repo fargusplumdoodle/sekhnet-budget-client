@@ -19,8 +19,9 @@ class AddTransactionRepository {
         amount, description, budget, date);
   }
 
-  Future<List<TransactionModel>> addIncome(int amount) async {
-    return await addTransactionApiClient.addIncome(amount);
+  Future<List<TransactionModel>> addIncome(
+      int amount, String description, String date) async {
+    return await addTransactionApiClient.addIncome(amount, description, date);
   }
 }
 
@@ -52,14 +53,17 @@ class AddTransactionApiClient {
     return TransactionModel.fromJSON(data);
   }
 
-  Future<List<TransactionModel>> addIncome(int amount) async {
-    final url = '$API_HOST/transaction/add_income/';
-    final body = jsonEncode({"amount": amount});
+  Future<List<TransactionModel>> addIncome(
+      int amount, String description, String date) async {
+    final url = '$API_HOST/transaction/income/';
+    final body = jsonEncode(
+        {"amount": amount, "description": description, "date": date});
 
     final response =
         await this.httpClient.post(url, headers: headers, body: body);
     if (response.statusCode != 201) {
-      throw Exception('error adding income');
+      throw Exception(
+          'error creating transaction: ${response.statusCode}: ${response.body}');
     }
     final data = jsonDecode(response.body) as List;
 

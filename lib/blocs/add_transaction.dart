@@ -65,7 +65,11 @@ class AddTransactionRequested extends AddTransactionEvent {
 
 class AddIncomeRequested extends AddTransactionEvent {
   final int amount;
-  const AddIncomeRequested({@required this.amount}) : assert(amount != null);
+  final String description;
+  final String date;
+  const AddIncomeRequested(
+      {@required this.amount, @required this.description, @required this.date})
+      : assert(amount != null && description != null && date != null);
 
   @override
   List<Object> get props => throw [];
@@ -102,7 +106,8 @@ class AddTransactionBloc
 
       try {
         final List<TransactionModel> transactions =
-            await addTransactionRepository.addIncome(event.amount);
+            await addTransactionRepository.addIncome(
+                event.amount, event.description, event.date);
         yield AddIncomeLoadSuccess(transactions: transactions);
       } catch (e) {
         print('Failed to add income:' + e.toString());
