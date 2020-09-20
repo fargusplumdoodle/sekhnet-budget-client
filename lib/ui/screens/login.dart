@@ -4,17 +4,24 @@ import 'package:budget/ui/widgets/login_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 
 import 'dashboard.dart';
 
 class LoginScreen extends StatelessWidget {
   static const routeName = "LoginScreen";
-  final _loginRepo =
-      LoginRepository(loginClient: LoginApiClient(httpClient: http.Client()));
+  final _loginRepo = LoginRepository(loginClient: LoginApiClient());
 
   @override
   Widget build(BuildContext context) {
+    initLogin().then((loginRequired) => {
+          if (!loginRequired)
+            {
+              SchedulerBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushReplacementNamed(context, Dashboard.routeName);
+              })
+            }
+        });
+
     return Scaffold(
       appBar: loginAppBar(),
       body: BlocProvider(
@@ -48,7 +55,6 @@ class LoginScreen extends StatelessWidget {
     }
 
     if (state is LoginLoadSuccess) {
-      // Navigator.pushNamed(context, Dashboard.routeName);
       SchedulerBinding.instance.addPostFrameCallback((_) {
         Navigator.pushReplacementNamed(context, Dashboard.routeName);
       });

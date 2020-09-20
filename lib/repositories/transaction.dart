@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:budget/globals.dart';
 import 'package:budget/model/models.dart';
-import 'package:http/http.dart' as http;
+import 'package:budget/repositories/api_client.dart';
 import 'package:meta/meta.dart';
 
 class AddTransactionRepository {
@@ -24,13 +24,7 @@ class AddTransactionRepository {
   }
 }
 
-class AddTransactionApiClient {
-  final http.Client httpClient;
-
-  AddTransactionApiClient({
-    @required this.httpClient,
-  }) : assert(httpClient != null);
-
+class AddTransactionApiClient extends ApiClient {
   Future<TransactionModel> addTransaction(
       int amount, String description, BudgetModel budget, String date) async {
     final url = '$API_HOST/transaction/';
@@ -41,8 +35,9 @@ class AddTransactionApiClient {
       "date": date
     });
 
-    final response =
-        await this.httpClient.post(url, headers: headers, body: body);
+    final response = await this
+        .httpClient
+        .post(url, headers: await getHeaders(), body: body);
     if (response.statusCode != 201) {
       throw Exception(
           'error creating transaction: ${response.statusCode}: ${response.body}');
@@ -58,8 +53,9 @@ class AddTransactionApiClient {
     final body = jsonEncode(
         {"amount": amount, "description": description, "date": date});
 
-    final response =
-        await this.httpClient.post(url, headers: headers, body: body);
+    final response = await this
+        .httpClient
+        .post(url, headers: await getHeaders(), body: body);
     if (response.statusCode != 201) {
       throw Exception(
           'error creating transaction: ${response.statusCode}: ${response.body}');

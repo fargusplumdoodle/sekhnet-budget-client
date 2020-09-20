@@ -2,9 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:budget/globals.dart';
+import 'package:budget/ui/screens/login.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
+
+import 'repositories.dart';
 
 class LoginResponse {
   final String errorMsg;
@@ -24,13 +29,7 @@ class LoginRepository {
   }
 }
 
-class LoginApiClient {
-  final http.Client httpClient;
-
-  LoginApiClient({
-    @required this.httpClient,
-  }) : assert(httpClient != null);
-
+class LoginApiClient extends ApiClient {
   Future<LoginResponse> login(String username, String password) async {
     final url = '$API_HOST/user/login';
     final body = jsonEncode({
@@ -42,14 +41,18 @@ class LoginApiClient {
     };
 
     final response =
-        await this.httpClient.post(url, body: body, headers: loginHeaders);
+        await super.httpClient.post(url, body: body, headers: loginHeaders);
     if (response.statusCode != 200) {
       return LoginResponse(
           errorMsg: "Unable to login with provided credentials",
           success: false);
     }
     final data = jsonDecode(response.body);
-    token = data["token"];
+
+    await super.storage.write(key: "token", value: data["token"]);
+    await super.storage.write(key: "username", value: username);
+    await super.storage.write(key: "password", value: password);
+
     return LoginResponse(errorMsg: "", success: true);
   }
 }
@@ -57,7 +60,7 @@ class LoginApiClient {
 Future<bool> initLogin() async {
   /*
   Determines how to log in depending on a few factors.
-  Returns if login screen is required or not
+  Returns true if login is required, false if login is not required
 
   1. If debug:
     -> Set credentials to dev/dev and API URL to staging,
@@ -68,7 +71,9 @@ Future<bool> initLogin() async {
 
    TODO: if web, always login
    */
-  final loginApiClient = LoginApiClient(httpClient: http.Client());
+  final loginApiClient = LoginApiClient();
+  final storage = new FlutterSecureStorage();
+
   // 1
   if (!kReleaseMode) {
     print("Starting in debug mode");
@@ -80,7 +85,29 @@ Future<bool> initLogin() async {
   print("Starting in prod mode");
 
   // 2
+  final username = await storage.read(key: 'username');
+  final password = await storage.read(key: 'username');
+  if (username != null && password != null) {
+    final response = await loginApiClient.login(username, password);
+    print(
+        "Used existing credentials. username: $username, password: $password Success: ${response.success}");
+    if (!response.success) {
+      // credentials failed, deleting them
+      await storage.delete(key: "username");
+      await storage.delete(key: "password");
+    }
+    return !response.success;
+  }
   // TODO: get existing credentials from storage and attempt to login
-
   return true;
+}
+
+void logout(BuildContext context) {
+  final storage = new FlutterSecureStorage();
+  storage.delete(key: "username");
+  storage.delete(key: "password");
+  storage.delete(key: "token");
+  SchedulerBinding.instance.addPostFrameCallback((_) {
+    Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+  });
 }

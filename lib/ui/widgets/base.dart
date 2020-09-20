@@ -1,3 +1,4 @@
+import 'package:budget/repositories/repositories.dart';
 import 'package:budget/ui/screens/add_transaction.dart';
 import 'package:flutter/material.dart';
 
@@ -6,13 +7,19 @@ class Base {
         title: Text('Sekhnet Budget'),
       );
 
-  static Widget drawer() => Drawer(
+  static Widget drawer(BuildContext context) => Drawer(
           child: Center(
         child: ListView(
           children: [
             Text('Dashboard'),
             Text('Transactions'),
             Text('Settings'),
+            FlatButton(
+              child: Text("LOG OUT"),
+              onPressed: () {
+                logout(context);
+              },
+            )
           ],
         ),
       ));

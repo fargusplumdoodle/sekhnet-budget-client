@@ -3,8 +3,8 @@ import 'dart:convert';
 
 import 'package:budget/globals.dart';
 import 'package:budget/model/models.dart';
+import 'package:budget/repositories/api_client.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 class BudgetRepository {
@@ -23,17 +23,12 @@ class BudgetRepository {
   }
 }
 
-class BudgetApiClient {
-  final http.Client httpClient;
-
-  BudgetApiClient({
-    @required this.httpClient,
-  }) : assert(httpClient != null);
-
+class BudgetApiClient extends ApiClient {
   Future<List<BudgetModel>> getBudgets() async {
     final url = '$API_HOST/budget';
 
-    final response = await this.httpClient.get(url, headers: headers);
+    final response =
+        await this.httpClient.get(url, headers: await getHeaders());
     if (response.statusCode != 200) {
       throw Exception('error getting budget list');
     }
@@ -54,7 +49,8 @@ class BudgetApiClient {
       int budgetID, int maxTransactions) async {
     final url = '$API_HOST/transaction/?budget=$budgetID';
 
-    final response = await this.httpClient.get(url, headers: headers);
+    final response =
+        await this.httpClient.get(url, headers: await getHeaders());
     if (response.statusCode != 200) {
       throw Exception('error getting transaction list');
     }

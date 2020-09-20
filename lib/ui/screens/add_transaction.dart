@@ -7,7 +7,6 @@ import 'package:budget/ui/widgets/transaction_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 
 class AddTransactionScreen extends StatefulWidget {
   static const routeName = "AddTransactionScreen";
@@ -19,14 +18,13 @@ class AddTransactionScreen extends StatefulWidget {
 class _AddTransactionScreenState extends State<AddTransactionScreen> {
   List<TransactionModel> createdTransactions = [];
   var _addTransactionRepo = AddTransactionRepository(
-      addTransactionApiClient:
-          AddTransactionApiClient(httpClient: http.Client()));
+      addTransactionApiClient: AddTransactionApiClient());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: Base.appBar(),
-        drawer: Base.drawer(),
+        drawer: Base.drawer(context),
         body: BlocProvider(
             create: (context) => AddTransactionBloc(
                 addTransactionRepository: _addTransactionRepo),
@@ -56,7 +54,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       }
 
                       if (state is AddIncomeLoadSuccess) {
-                        createdTransactions.addAll(state.transactions);
+                        state.transactions.addAll(createdTransactions);
+                        createdTransactions = state.transactions;
                       }
 
                       return TransactionList(createdTransactions, 1000, true);

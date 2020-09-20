@@ -5,18 +5,16 @@ import 'package:budget/ui/widgets/dashboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 
 class Dashboard extends StatelessWidget {
   static const routeName = '/';
-  var _budgetRepo = BudgetRepository(
-      budgetApiClient: BudgetApiClient(httpClient: http.Client()));
+  var _budgetRepo = BudgetRepository(budgetApiClient: BudgetApiClient());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: Base.appBar(),
-        drawer: Base.drawer(),
+        drawer: Base.drawer(context),
         floatingActionButton: Base.floatingActionButton(context),
         body: Container(
             padding: EdgeInsets.all(8.8),
