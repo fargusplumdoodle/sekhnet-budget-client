@@ -25,7 +25,7 @@ class BudgetRepository {
 
 class BudgetApiClient extends ApiClient {
   Future<List<BudgetModel>> getBudgets() async {
-    final url = '$API_HOST/budget';
+    final url = '${await getApiHost()}/budget';
 
     final response =
         await this.httpClient.get(url, headers: await getHeaders());
@@ -47,7 +47,7 @@ class BudgetApiClient extends ApiClient {
 
   Future<List<TransactionModel>> getTransactions(
       int budgetID, int maxTransactions) async {
-    final url = '$API_HOST/transaction/?budget=$budgetID';
+    final url = '${await getApiHost()}/transaction/?budget=$budgetID';
 
     final response =
         await this.httpClient.get(url, headers: await getHeaders());

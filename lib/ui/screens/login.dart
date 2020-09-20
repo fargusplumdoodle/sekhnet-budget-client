@@ -75,15 +75,7 @@ class LoginScreen extends StatelessWidget {
         title: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text("Login"),
-        IconButton(
-          icon: Icon(
-            Icons.settings,
-          ),
-          onPressed: () {
-            // TODO: GO TO SETTINGS
-          },
-        )
+        Text("Sekhnet Budget - Login"),
       ],
     ));
   }

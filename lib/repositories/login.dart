@@ -31,7 +31,7 @@ class LoginRepository {
 
 class LoginApiClient extends ApiClient {
   Future<LoginResponse> login(String username, String password) async {
-    final url = '$API_HOST/user/login';
+    final url = '${await getApiHost()}/user/login';
     final body = jsonEncode({
       "username": username,
       "password": password,
@@ -49,9 +49,9 @@ class LoginApiClient extends ApiClient {
     }
     final data = jsonDecode(response.body);
 
-    await super.storage.write(key: "token", value: data["token"]);
-    await super.storage.write(key: "username", value: username);
-    await super.storage.write(key: "password", value: password);
+    await super.storage.write(key: Constants.TOKEN, value: data["token"]);
+    await super.storage.write(key: Constants.USERNAME, value: username);
+    await super.storage.write(key: Constants.PASSWORD, value: password);
 
     return LoginResponse(errorMsg: "", success: true);
   }
@@ -77,7 +77,6 @@ Future<bool> initLogin() async {
   // 1
   if (!kReleaseMode) {
     print("Starting in debug mode");
-    API_HOST = "http://10.0.0.85/api/v2";
     final response = await loginApiClient.login("dev", "dev");
     print("response: ${response.success}: ${response.errorMsg}");
     return !response.success;
@@ -85,16 +84,14 @@ Future<bool> initLogin() async {
   print("Starting in prod mode");
 
   // 2
-  final username = await storage.read(key: 'username');
-  final password = await storage.read(key: 'username');
+  final username = await storage.read(key: Constants.USERNAME);
+  final password = await storage.read(key: Constants.PASSWORD);
   if (username != null && password != null) {
     final response = await loginApiClient.login(username, password);
-    print(
-        "Used existing credentials. username: $username, password: $password Success: ${response.success}");
     if (!response.success) {
       // credentials failed, deleting them
-      await storage.delete(key: "username");
-      await storage.delete(key: "password");
+      await storage.delete(key: Constants.USERNAME);
+      await storage.delete(key: Constants.PASSWORD);
     }
     return !response.success;
   }
@@ -104,9 +101,7 @@ Future<bool> initLogin() async {
 
 void logout(BuildContext context) {
   final storage = new FlutterSecureStorage();
-  storage.delete(key: "username");
-  storage.delete(key: "password");
-  storage.delete(key: "token");
+  storage.deleteAll();
   SchedulerBinding.instance.addPostFrameCallback((_) {
     Navigator.pushReplacementNamed(context, LoginScreen.routeName);
   });

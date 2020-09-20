@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:budget/globals.dart';
 import 'package:budget/model/models.dart';
 import 'package:budget/repositories/api_client.dart';
 import 'package:meta/meta.dart';
@@ -22,12 +21,16 @@ class AddTransactionRepository {
       int amount, String description, String date) async {
     return await addTransactionApiClient.addIncome(amount, description, date);
   }
+
+  Future<List<TransactionModel>> getAllTransactions() async {
+    return await addTransactionApiClient.getAllTransactions();
+  }
 }
 
 class AddTransactionApiClient extends ApiClient {
   Future<TransactionModel> addTransaction(
       int amount, String description, BudgetModel budget, String date) async {
-    final url = '$API_HOST/transaction/';
+    final url = '${await getApiHost()}/transaction/';
     final body = jsonEncode({
       "amount": amount,
       "description": description,
@@ -49,7 +52,7 @@ class AddTransactionApiClient extends ApiClient {
 
   Future<List<TransactionModel>> addIncome(
       int amount, String description, String date) async {
-    final url = '$API_HOST/transaction/income/';
+    final url = '${await getApiHost()}/transaction/income/';
     final body = jsonEncode(
         {"amount": amount, "description": description, "date": date});
 
@@ -57,6 +60,25 @@ class AddTransactionApiClient extends ApiClient {
         .httpClient
         .post(url, headers: await getHeaders(), body: body);
     if (response.statusCode != 201) {
+      throw Exception(
+          'error creating transaction: ${response.statusCode}: ${response.body}');
+    }
+    final data = jsonDecode(response.body) as List;
+
+    var transactionList = new List<TransactionModel>();
+    for (int i = 0; i < data.length; i++) {
+      transactionList.add(TransactionModel.fromJSON(data[i]));
+    }
+
+    return transactionList;
+  }
+
+  Future<List<TransactionModel>> getAllTransactions() async {
+    final url = '${await getApiHost()}/transaction/';
+
+    final response =
+        await this.httpClient.get(url, headers: await getHeaders());
+    if (response.statusCode != 200) {
       throw Exception(
           'error creating transaction: ${response.statusCode}: ${response.body}');
     }

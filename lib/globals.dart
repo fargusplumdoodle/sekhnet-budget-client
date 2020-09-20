@@ -1,14 +1,7 @@
 import 'model/budget.dart';
 
-String API_HOST = "http://10.0.0.85/api/v2";
-String USERNAME = "dev";
-String PASSWORD = "dev";
-String token = 'ff41f973cda1d22805d642337da8d5f9b9078714';
-
-Map<String, String> get headers => {
-      "Content-Type": "application/json",
-      "Authorization": 'Token $token',
-    };
+const API_HOST = "http://10.0.0.84/api/v2";
+const STAGING_API_HOST = "http://10.0.0.85/api/v2";
 
 class Style {
   static const double h1 = 55;
@@ -32,4 +25,11 @@ double convertToDollars(int amount) {
 
 int convertToCents(int amount) {
   return amount * 100;
+}
+
+class Constants {
+  static const USERNAME = "username";
+  static const PASSWORD = "password";
+  static const TOKEN = "token";
+  static const API_HOST = "API_HOST";
 }

@@ -38,8 +38,7 @@ class BudgetDetail extends StatelessWidget {
             BudgetCard(budget),
             Divider(),
             BlocProvider(
-                create: (context) =>
-                    TransactionBloc(budgetRepository: _budgetRepo),
+                create: (context) => TransactionBloc(),
                 child: BlocBuilder<TransactionBloc, TransactionState>(
                     builder: (context, state) {
                   if (state is TransactionInitial) {

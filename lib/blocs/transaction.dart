@@ -42,12 +42,21 @@ class TransactionRequested extends TransactionEvent {
   List<Object> get props => throw [budgetID, maxTransactions];
 }
 
-class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
-  final BudgetRepository budgetRepository;
+class AllTransactionsRequested extends TransactionEvent {
+  const AllTransactionsRequested();
 
-  TransactionBloc({@required this.budgetRepository})
-      : assert(budgetRepository != null),
-        super(TransactionInitial());
+  @override
+  List<Object> get props => [];
+}
+
+class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
+  final BudgetRepository budgetRepository =
+      BudgetRepository(budgetApiClient: BudgetApiClient());
+  final AddTransactionRepository transactionRepository =
+      AddTransactionRepository(
+          addTransactionApiClient: AddTransactionApiClient());
+
+  TransactionBloc() : super(TransactionInitial());
 
   @override
   Stream<TransactionState> mapEventToState(TransactionEvent event) async* {
@@ -57,6 +66,18 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       try {
         final List<TransactionModel> transactions = await budgetRepository
             .getTransactions(event.budgetID, event.maxTransactions);
+
+        yield TransactionLoadSuccess(transactions: transactions);
+      } catch (_) {
+        yield TransactionLoadFailure();
+      }
+    }
+    if (event is AllTransactionsRequested) {
+      yield TransactionLoadInProgress();
+
+      try {
+        final List<TransactionModel> transactions =
+            await transactionRepository.getAllTransactions();
 
         yield TransactionLoadSuccess(transactions: transactions);
       } catch (_) {
