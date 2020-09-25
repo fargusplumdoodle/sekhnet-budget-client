@@ -44,6 +44,14 @@ abstract class AddTransactionEvent extends Equatable {
   const AddTransactionEvent();
 }
 
+class UpdateTransactionRequested extends AddTransactionEvent {
+  final TransactionModel trans;
+
+  UpdateTransactionRequested({@required this.trans}) : assert(trans != null);
+  @override
+  List<TransactionModel> get props => [trans];
+}
+
 class AddTransactionRequested extends AddTransactionEvent {
   final int amount;
   final String description;
@@ -111,6 +119,19 @@ class AddTransactionBloc
         yield AddIncomeLoadSuccess(transactions: transactions);
       } catch (e) {
         print('Failed to add income:' + e.toString());
+        yield AddTransactionLoadFailure();
+      }
+    }
+
+    if (event is UpdateTransactionRequested) {
+      yield AddTransactionLoadInProgress();
+
+      try {
+        final TransactionModel transaction =
+            await addTransactionRepository.updateTransaction(event.trans);
+        yield AddTransactionLoadSuccess(transaction: transaction);
+      } catch (e) {
+        print('Failed to update transaction:' + e.toString());
         yield AddTransactionLoadFailure();
       }
     }

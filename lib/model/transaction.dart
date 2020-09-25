@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:budget/globals.dart';
 import 'package:budget/model/budget.dart';
 import 'package:equatable/equatable.dart';
@@ -61,6 +63,15 @@ class TransactionModel extends Equatable {
   static TransactionModel fromJSON(dynamic json) {
     return TransactionModel(json["id"], json["amount"], json["description"],
         BudgetModel.getBudgetFromId(json["budget"]), json["date"]);
+  }
+
+  dynamic toJSON() {
+    return jsonEncode({
+      "amount": this.amount,
+      "description": this.description,
+      "budget": this.budget.id,
+      "date": this.date
+    });
   }
 
   @override

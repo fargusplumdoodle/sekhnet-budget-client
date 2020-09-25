@@ -17,6 +17,10 @@ class AddTransactionRepository {
         amount, description, budget, date);
   }
 
+  Future<TransactionModel> updateTransaction(TransactionModel trans) async {
+    return await addTransactionApiClient.updateTransaction(trans);
+  }
+
   Future<List<TransactionModel>> addIncome(
       int amount, String description, String date) async {
     return await addTransactionApiClient.addIncome(amount, description, date);
@@ -44,6 +48,24 @@ class AddTransactionApiClient extends ApiClient {
     if (response.statusCode != 201) {
       throw Exception(
           'error creating transaction: ${response.statusCode}: ${response.body}');
+    }
+    final data = jsonDecode(response.body);
+
+    return TransactionModel.fromJSON(data);
+  }
+
+  Future<TransactionModel> updateTransaction(TransactionModel trans) async {
+    final url = '${await getApiHost()}/transaction/${trans.id}/';
+
+    print(trans.toJSON());
+    final response = await this
+        .httpClient
+        .put(url, headers: await getHeaders(), body: trans.toJSON());
+
+    print('repsonse: ${response.statusCode}: ${response.body}');
+    if (response.statusCode != 200) {
+      throw Exception(
+          'error updating transaction: ${response.statusCode}: ${response.body}');
     }
     final data = jsonDecode(response.body);
 

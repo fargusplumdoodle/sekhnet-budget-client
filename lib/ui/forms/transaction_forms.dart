@@ -133,10 +133,12 @@ class _EditTransactionFormState extends State<EditTransactionForm> {
           TransactionDescriptionInput(transaction),
           TransactionDateInput(transaction),
           TransactionBudgetDropdown(transaction),
-          TextButton(
+          RaisedButton(
             child: Text("SUBMIT"),
             onPressed: () {
-              // TODO: CALL API
+              this._formKey.currentState.save();
+              BlocProvider.of<AddTransactionBloc>(context)
+                  .add(UpdateTransactionRequested(trans: transaction));
             },
           )
         ],
