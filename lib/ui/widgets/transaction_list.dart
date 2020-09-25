@@ -2,6 +2,8 @@ import 'package:budget/model/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../ui.dart';
+
 class TransactionList extends StatelessWidget {
   /*
   Returns the number of transactions specified from
@@ -22,21 +24,27 @@ class TransactionList extends StatelessWidget {
             ? numberOfTransactions
             : transactions.length,
         itemBuilder: (BuildContext context, int index) {
-          return Card(
-            child: ListTile(
-              leading: Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    transactions[index].getPrettyAmount(false),
+          return GestureDetector(
+            onTap: () => {
+              Navigator.pushNamed(context, EditTransaction.routeName,
+                  arguments: transactions[index])
+            },
+            child: Card(
+              child: ListTile(
+                leading: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      transactions[index].getPrettyAmount(false),
+                    ),
                   ),
                 ),
-              ),
-              title: Text(transactions[index].getPrettyDescription()),
-              subtitle: Text(
-                showBudgetName
-                    ? '${transactions[index].date}  -  ${transactions[index].budget.name}'
-                    : transactions[index].date,
+                title: Text(transactions[index].getPrettyDescription()),
+                subtitle: Text(
+                  showBudgetName
+                      ? '${transactions[index].date}  -  ${transactions[index].budget.name}'
+                      : transactions[index].date,
+                ),
               ),
             ),
           );

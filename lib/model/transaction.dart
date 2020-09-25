@@ -7,7 +7,7 @@ class TransactionModel extends Equatable {
   int _amount;
   String _description;
   BudgetModel budget;
-  String _date;
+  String _date; // TODO: CHANGE TO DATETIME
 
   TransactionModel(
       this._id, this._amount, this._description, this.budget, this._date);

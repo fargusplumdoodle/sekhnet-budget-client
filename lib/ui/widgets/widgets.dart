@@ -1,4 +1,4 @@
-export '../forms/add_transaction_form.dart';
+export '../forms/transaction_forms.dart';
 export 'base.dart';
 export 'dashboard.dart';
 export 'transaction_list.dart';

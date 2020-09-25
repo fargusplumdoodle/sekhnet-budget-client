@@ -1,7 +1,6 @@
 import 'package:budget/blocs/transaction.dart';
 import 'package:budget/globals.dart';
 import 'package:budget/model/budget.dart';
-import 'package:budget/repositories/repositories.dart';
 import 'package:budget/ui/widgets/base.dart';
 import 'package:budget/ui/widgets/transaction_list.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,6 @@ class BudgetDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final BudgetModel budget = ModalRoute.of(context).settings.arguments;
-    var _budgetRepo = BudgetRepository(budgetApiClient: BudgetApiClient());
 
     return Scaffold(
       appBar: Base.appBar(),

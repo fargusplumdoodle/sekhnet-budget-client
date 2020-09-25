@@ -3,15 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../../globals.dart';
 
-class AddTransactionFormData {
-  double amount;
-  String description;
-  DateTime date;
-  String budget;
-}
-
 class TransactionBudgetDropdown extends StatefulWidget {
-  final AddTransactionFormData _data;
+  final TransactionModel _data;
   String dropdownValue = budgetStorage[0].name;
 
   TransactionBudgetDropdown(this._data);
@@ -21,15 +14,16 @@ class TransactionBudgetDropdown extends StatefulWidget {
 }
 
 class _TransactionBudgetDropdownState extends State<TransactionBudgetDropdown> {
-  final AddTransactionFormData _data;
-  String dropdownValue = budgetStorage[0].name;
+  final TransactionModel _data;
+  String dropDownValue;
 
   _TransactionBudgetDropdownState(this._data);
 
   @override
   Widget build(BuildContext context) {
+    dropDownValue = this._data.budget.name;
     return DropdownButton(
-        value: dropdownValue,
+        value: dropDownValue,
         icon: Icon(Icons.arrow_downward),
         hint: Text("Budget"),
         iconSize: 24,
@@ -42,9 +36,9 @@ class _TransactionBudgetDropdownState extends State<TransactionBudgetDropdown> {
         isExpanded: true,
         onChanged: (dynamic newValue) {
           setState(() {
-            dropdownValue = newValue;
+            dropDownValue = newValue;
           });
-          this._data.budget = newValue;
+          this._data.budget = get_budget_by_name(newValue);
         },
         items:
             budgetStorage.map<DropdownMenuItem<String>>((BudgetModel budget) {
@@ -61,13 +55,14 @@ class _TransactionBudgetDropdownState extends State<TransactionBudgetDropdown> {
 }
 
 class TransactionDescriptionInput extends StatelessWidget {
-  final AddTransactionFormData _data;
+  final TransactionModel _data;
   final _controller = TextEditingController();
 
   TransactionDescriptionInput(this._data);
 
   @override
   Widget build(BuildContext context) {
+    this._controller.text = this._data.description;
     return TextFormField(
         // The validator receives the text that the user has entered.
         controller: _controller,
@@ -92,30 +87,32 @@ class TransactionDescriptionInput extends StatelessWidget {
 }
 
 class TransactionDateInput extends StatelessWidget {
-  final AddTransactionFormData _data;
+  final TransactionModel _data;
 
   TransactionDateInput(this._data);
 
   @override
   Widget build(BuildContext context) {
+    // TODO: USE SUPPLIED TRANSACTIONS DATE
     return InputDatePickerFormField(
         firstDate: DateTime(2000, 11, 3),
         lastDate: DateTime(2077, 11, 3),
         initialDate: DateTime.now(),
         onDateSaved: (DateTime value) {
-          this._data.date = value;
+          this._data.date = "${value.year}-${value.month}-${value.day}";
         });
   }
 }
 
 class TransactionAmountInput extends StatelessWidget {
-  final AddTransactionFormData _data;
+  final TransactionModel _data;
   final _controller = TextEditingController();
 
   TransactionAmountInput(this._data);
 
   @override
   Widget build(BuildContext context) {
+    this._controller.text = convertToDollars(this._data.amount).toString();
     return TextFormField(
         // The validator receives the text that the user has entered.
         keyboardType: TextInputType.number,
@@ -135,7 +132,7 @@ class TransactionAmountInput extends StatelessWidget {
           return null;
         },
         onSaved: (String value) {
-          this._data.amount = double.parse(value);
+          this._data.amount = (double.parse(value) * 100).round();
         });
   }
 }

@@ -1,5 +1,6 @@
 import 'package:budget/blocs/add_transaction.dart';
 import 'package:budget/globals.dart';
+import 'package:budget/model/models.dart';
 import 'package:budget/ui/forms/forms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -7,19 +8,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../globals.dart';
 
-class AddTransactionFormWidget extends StatefulWidget {
+class AddTransactionForm extends StatefulWidget {
   @override
-  _AddTransactionFormWidgetState createState() =>
-      _AddTransactionFormWidgetState();
+  _AddTransactionFormState createState() => _AddTransactionFormState();
 }
 
-class _AddTransactionFormWidgetState extends State<AddTransactionFormWidget> {
+class _AddTransactionFormState extends State<AddTransactionForm> {
   final _formKey = GlobalKey<FormState>();
-  AddTransactionFormData _data = AddTransactionFormData();
+  TransactionModel _data = TransactionModel(0, 0, "", budgetStorage[0], "");
 
   @override
   Widget build(BuildContext context) {
-    this._data.budget = budgetStorage[0].name;
     return Form(
         key: _formKey,
         child: Column(children: <Widget>[
@@ -82,45 +81,66 @@ class _AddTransactionFormWidgetState extends State<AddTransactionFormWidget> {
         ]));
   }
 
-  void addPostitiveTransaction(
-      AddTransactionFormData data, BuildContext context) {
+  void addPostitiveTransaction(TransactionModel data, BuildContext context) {
     _formKey.currentState.save();
     // database uses cents, add positive transaction will always have the
     // amount evaluates to positive
-    int amount = (data.amount.abs() * 100).round();
-    String date = "${data.date.year}-${data.date.month}-${data.date.day}";
-
     BlocProvider.of<AddTransactionBloc>(context).add(AddTransactionRequested(
-      amount: amount,
+      amount: data.amount.abs(),
       description: data.description,
-      budget: get_budget_by_name(data.budget),
-      date: date,
+      budget: data.budget,
+      date: data.date,
     ));
   }
 
-  void addNegativeTransaction(
-      AddTransactionFormData data, BuildContext context) {
+  void addNegativeTransaction(TransactionModel data, BuildContext context) {
     _formKey.currentState.save();
     // database uses cents, add positive transaction will always have the
     // amount evaluates to negative
-    int amount = 0 - (data.amount.abs() * 100).round();
-    String date = "${data.date.year}-${data.date.month}-${data.date.day}";
-
     BlocProvider.of<AddTransactionBloc>(context).add(AddTransactionRequested(
-      amount: amount,
+      amount: 0 - data.amount.abs(),
       description: data.description,
-      budget: get_budget_by_name(data.budget),
-      date: date,
+      budget: data.budget,
+      date: data.date,
     ));
   }
 
-  void addIncomeTransaction(AddTransactionFormData data, BuildContext context) {
+  void addIncomeTransaction(TransactionModel data, BuildContext context) {
     _formKey.currentState.save();
     // database uses cents, add positive transaction will always have the
-    int amount = (data.amount * 100).round();
-    String date = "${data.date.year}-${data.date.month}-${data.date.day}";
-
     BlocProvider.of<AddTransactionBloc>(context).add(AddIncomeRequested(
-        amount: amount, description: data.description, date: date));
+        amount: data.amount, description: data.description, date: data.date));
+  }
+}
+
+class EditTransactionForm extends StatefulWidget {
+  @override
+  _EditTransactionFormState createState() => _EditTransactionFormState();
+}
+
+class _EditTransactionFormState extends State<EditTransactionForm> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    final TransactionModel transaction =
+        ModalRoute.of(context).settings.arguments;
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: <Widget>[
+          TransactionAmountInput(transaction),
+          TransactionDescriptionInput(transaction),
+          TransactionDateInput(transaction),
+          TransactionBudgetDropdown(transaction),
+          TextButton(
+            child: Text("SUBMIT"),
+            onPressed: () {
+              // TODO: CALL API
+            },
+          )
+        ],
+      ),
+    );
   }
 }

@@ -1,10 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:budget/simple_bloc_observer.dart';
-import 'package:budget/ui/screens/add_transaction.dart';
-import 'package:budget/ui/screens/budget_detail.dart';
-import 'package:budget/ui/screens/dashboard.dart';
-import 'package:budget/ui/screens/list_transactions.dart';
-import 'package:budget/ui/screens/login.dart';
+import 'package:budget/ui/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,6 +21,7 @@ class MyApp extends StatelessWidget {
         AddTransactionScreen.routeName: (context) => AddTransactionScreen(),
         LoginScreen.routeName: (context) => LoginScreen(),
         ListTransactions.routeName: (context) => ListTransactions(),
+        EditTransaction.routeName: (context) => EditTransaction(),
       },
       title: 'Sekhnet Budget',
       theme: ThemeData.dark(),

@@ -1,7 +1,7 @@
 import 'package:budget/blocs/add_transaction.dart';
 import 'package:budget/model/models.dart';
 import 'package:budget/repositories/repositories.dart';
-import 'package:budget/ui/forms/add_transaction_form.dart';
+import 'package:budget/ui/forms/transaction_forms.dart';
 import 'package:budget/ui/widgets/base.dart';
 import 'package:budget/ui/widgets/transaction_list.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: ListView(
                   children: <Widget>[
-                    AddTransactionFormWidget(),
+                    AddTransactionForm(),
                     Divider(),
                     BlocBuilder<AddTransactionBloc, AddTransactionState>(
                         builder: (context, state) {
