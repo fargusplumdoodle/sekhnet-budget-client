@@ -25,7 +25,11 @@ class TransactionLoadSuccess extends TransactionState {
   List<TransactionModel> get props => transactions;
 }
 
-class TransactionLoadFailure extends TransactionState {}
+class TransactionLoadFailure extends TransactionState {
+  final errorMsg;
+
+  TransactionLoadFailure(this.errorMsg);
+}
 
 abstract class TransactionEvent extends Equatable {
   const TransactionEvent();
@@ -40,6 +44,17 @@ class TransactionRequested extends TransactionEvent {
 
   @override
   List<Object> get props => throw [budgetID, maxTransactions];
+}
+
+class TransferFundsRequested extends TransactionEvent {
+  final TransferFundsData data;
+
+  const TransferFundsRequested({
+    @required this.data,
+  }) : assert(data != null);
+
+  @override
+  List<Object> get props => throw [data];
 }
 
 class AllTransactionsRequested extends TransactionEvent {
@@ -68,8 +83,8 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
             .getTransactions(event.budgetID, event.maxTransactions);
 
         yield TransactionLoadSuccess(transactions: transactions);
-      } catch (_) {
-        yield TransactionLoadFailure();
+      } catch (e) {
+        yield TransactionLoadFailure(e.toString());
       }
     }
     if (event is AllTransactionsRequested) {
@@ -80,8 +95,21 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
             await transactionRepository.getAllTransactions();
 
         yield TransactionLoadSuccess(transactions: transactions);
-      } catch (_) {
-        yield TransactionLoadFailure();
+      } catch (e) {
+        yield TransactionLoadFailure(e.toString());
+      }
+    }
+
+    if (event is TransferFundsRequested) {
+      yield TransactionLoadInProgress();
+
+      try {
+        final List<TransactionModel> transactions =
+            await transactionRepository.transferFunds(event.data);
+        yield TransactionLoadSuccess(transactions: transactions);
+      } catch (e) {
+        print('Failed to update transaction:' + e.toString());
+        yield TransactionLoadFailure(e);
       }
     }
   }

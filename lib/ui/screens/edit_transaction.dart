@@ -18,7 +18,7 @@ class _EditTransactionState extends State<EditTransaction> {
         ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
-        appBar: Base.appBar(),
+        appBar: Base.appBar("Edit Transaction"),
         drawer: Base.drawer(context),
         body: BlocProvider(
             create: (context) => AddTransactionBloc(

@@ -13,7 +13,7 @@ class _ListTransactionsState extends State<ListTransactions> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: Base.appBar(),
+        appBar: Base.appBar("Recent Transactions"),
         drawer: Base.drawer(context),
         body: BlocProvider(
             create: (context) => TransactionBloc(),

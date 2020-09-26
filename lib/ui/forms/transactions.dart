@@ -93,11 +93,10 @@ class TransactionDateInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: USE SUPPLIED TRANSACTIONS DATE
     return InputDatePickerFormField(
         firstDate: DateTime(2000, 11, 3),
         lastDate: DateTime(2077, 11, 3),
-        initialDate: DateTime.now(),
+        initialDate: this._data.date,
         onDateSaved: (DateTime value) {
           this._data.date = value;
         });

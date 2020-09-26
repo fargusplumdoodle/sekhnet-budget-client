@@ -23,7 +23,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: Base.appBar(),
+        appBar: Base.appBar("Add Transaction"),
         drawer: Base.drawer(context),
         body: BlocProvider(
             create: (context) => AddTransactionBloc(

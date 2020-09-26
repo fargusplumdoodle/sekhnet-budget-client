@@ -5,9 +5,11 @@ import 'package:budget/ui/screens/list_transactions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import '../ui.dart';
+
 class Base {
-  static Widget appBar() => AppBar(
-        title: Text('Sekhnet Budget'),
+  static Widget appBar(String title) => AppBar(
+        title: Text(title),
       );
 
   static Widget drawer(BuildContext context) => Drawer(
@@ -28,6 +30,15 @@ class Base {
                 SchedulerBinding.instance.addPostFrameCallback((_) {
                   Navigator.pushReplacementNamed(
                       context, ListTransactions.routeName);
+                });
+              },
+            ),
+            FlatButton(
+              child: Text("TRANSFER FUNDS"),
+              onPressed: () {
+                SchedulerBinding.instance.addPostFrameCallback((_) {
+                  Navigator.pushReplacementNamed(
+                      context, TransferFunds.routeName);
                 });
               },
             ),

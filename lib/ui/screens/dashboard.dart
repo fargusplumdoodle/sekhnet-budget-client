@@ -13,7 +13,7 @@ class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: Base.appBar(),
+        appBar: Base.appBar("Sekhnet Budget"),
         drawer: Base.drawer(context),
         floatingActionButton: Base.floatingActionButton(context),
         body: Container(

@@ -16,7 +16,7 @@ class BudgetDetail extends StatelessWidget {
     final BudgetModel budget = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
-      appBar: Base.appBar(),
+      appBar: Base.appBar("Budget: ${budget.name}"),
       floatingActionButton:
           FloatingActionButton(child: Icon(Icons.info)), // TODO: make reporting
       body: Padding(

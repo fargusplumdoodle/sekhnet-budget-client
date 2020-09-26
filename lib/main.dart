@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
         LoginScreen.routeName: (context) => LoginScreen(),
         ListTransactions.routeName: (context) => ListTransactions(),
         EditTransaction.routeName: (context) => EditTransaction(),
+        TransferFunds.routeName: (context) => TransferFunds(),
       },
       title: 'Sekhnet Budget',
       theme: ThemeData.dark(),
