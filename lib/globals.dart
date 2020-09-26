@@ -33,3 +33,7 @@ class Constants {
   static const TOKEN = "token";
   static const API_HOST = "API_HOST";
 }
+
+String convertDateTimeToString(DateTime date) {
+  return "${date.year}-${date.month}-${date.day}";
+}

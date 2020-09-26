@@ -44,8 +44,11 @@ class _EditTransactionState extends State<EditTransaction> {
                 ));
               }
 
-              return Column(
-                children: widgets,
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: widgets,
+                ),
               );
             })));
   }

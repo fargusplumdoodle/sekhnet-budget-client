@@ -9,14 +9,14 @@ class TransactionModel extends Equatable {
   int _amount;
   String _description;
   BudgetModel budget;
-  String _date; // TODO: CHANGE TO DATETIME
+  DateTime _date; // TODO: CHANGE TO DATETIME
 
   TransactionModel(
       this._id, this._amount, this._description, this.budget, this._date);
 
-  String get date => _date;
+  DateTime get date => _date;
 
-  set date(String value) {
+  set date(DateTime value) {
     _date = value;
   }
 
@@ -61,8 +61,12 @@ class TransactionModel extends Equatable {
   }
 
   static TransactionModel fromJSON(dynamic json) {
-    return TransactionModel(json["id"], json["amount"], json["description"],
-        BudgetModel.getBudgetFromId(json["budget"]), json["date"]);
+    return TransactionModel(
+        json["id"],
+        json["amount"],
+        json["description"],
+        BudgetModel.getBudgetFromId(json["budget"]),
+        DateTime.parse(json["date"]));
   }
 
   dynamic toJSON() {
@@ -70,7 +74,7 @@ class TransactionModel extends Equatable {
       "amount": this.amount,
       "description": this.description,
       "budget": this.budget.id,
-      "date": this.date
+      "date": convertDateTimeToString(this.date)
     });
   }
 

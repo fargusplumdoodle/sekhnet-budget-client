@@ -40,8 +40,10 @@ class LoginApiClient extends ApiClient {
       "Content-Type": "application/json",
     };
 
+    print(url);
     final response =
         await super.httpClient.post(url, body: body, headers: loginHeaders);
+    print(await super.storage.read(key: Constants.API_HOST));
     if (response.statusCode != 200) {
       return LoginResponse(
           errorMsg: "Unable to login with provided credentials",
@@ -95,7 +97,6 @@ Future<bool> initLogin() async {
     }
     return !response.success;
   }
-  // TODO: get existing credentials from storage and attempt to login
   return true;
 }
 

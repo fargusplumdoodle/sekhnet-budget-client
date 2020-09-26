@@ -15,7 +15,8 @@ class AddTransactionForm extends StatefulWidget {
 
 class _AddTransactionFormState extends State<AddTransactionForm> {
   final _formKey = GlobalKey<FormState>();
-  TransactionModel _data = TransactionModel(0, 0, "", budgetStorage[0], "");
+  TransactionModel _data =
+      TransactionModel(0, 0, "", budgetStorage[0], DateTime.now());
 
   @override
   Widget build(BuildContext context) {
@@ -85,24 +86,17 @@ class _AddTransactionFormState extends State<AddTransactionForm> {
     _formKey.currentState.save();
     // database uses cents, add positive transaction will always have the
     // amount evaluates to positive
-    BlocProvider.of<AddTransactionBloc>(context).add(AddTransactionRequested(
-      amount: data.amount.abs(),
-      description: data.description,
-      budget: data.budget,
-      date: data.date,
-    ));
+    BlocProvider.of<AddTransactionBloc>(context)
+        .add(AddTransactionRequested(trans: data));
   }
 
   void addNegativeTransaction(TransactionModel data, BuildContext context) {
     _formKey.currentState.save();
     // database uses cents, add positive transaction will always have the
     // amount evaluates to negative
-    BlocProvider.of<AddTransactionBloc>(context).add(AddTransactionRequested(
-      amount: 0 - data.amount.abs(),
-      description: data.description,
-      budget: data.budget,
-      date: data.date,
-    ));
+    data.amount = 0 - data.amount.abs();
+    BlocProvider.of<AddTransactionBloc>(context)
+        .add(AddTransactionRequested(trans: data));
   }
 
   void addIncomeTransaction(TransactionModel data, BuildContext context) {

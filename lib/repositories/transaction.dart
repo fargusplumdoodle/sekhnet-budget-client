@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:budget/globals.dart';
 import 'package:budget/model/models.dart';
 import 'package:budget/repositories/api_client.dart';
 import 'package:meta/meta.dart';
@@ -11,10 +12,8 @@ class AddTransactionRepository {
   AddTransactionRepository({@required this.addTransactionApiClient})
       : assert(addTransactionApiClient != null);
 
-  Future<TransactionModel> addTransaction(
-      int amount, String description, BudgetModel budget, String date) async {
-    return await addTransactionApiClient.addTransaction(
-        amount, description, budget, date);
+  Future<TransactionModel> addTransaction(TransactionModel trans) async {
+    return await addTransactionApiClient.addTransaction(trans);
   }
 
   Future<TransactionModel> updateTransaction(TransactionModel trans) async {
@@ -22,7 +21,7 @@ class AddTransactionRepository {
   }
 
   Future<List<TransactionModel>> addIncome(
-      int amount, String description, String date) async {
+      int amount, String description, DateTime date) async {
     return await addTransactionApiClient.addIncome(amount, description, date);
   }
 
@@ -32,19 +31,11 @@ class AddTransactionRepository {
 }
 
 class AddTransactionApiClient extends ApiClient {
-  Future<TransactionModel> addTransaction(
-      int amount, String description, BudgetModel budget, String date) async {
+  Future<TransactionModel> addTransaction(TransactionModel trans) async {
     final url = '${await getApiHost()}/transaction/';
-    final body = jsonEncode({
-      "amount": amount,
-      "description": description,
-      "budget": budget.id,
-      "date": date
-    });
-
     final response = await this
         .httpClient
-        .post(url, headers: await getHeaders(), body: body);
+        .post(url, headers: await getHeaders(), body: trans.toJSON());
     if (response.statusCode != 201) {
       throw Exception(
           'error creating transaction: ${response.statusCode}: ${response.body}');
@@ -73,10 +64,13 @@ class AddTransactionApiClient extends ApiClient {
   }
 
   Future<List<TransactionModel>> addIncome(
-      int amount, String description, String date) async {
+      int amount, String description, DateTime date) async {
     final url = '${await getApiHost()}/transaction/income/';
-    final body = jsonEncode(
-        {"amount": amount, "description": description, "date": date});
+    final body = jsonEncode({
+      "amount": amount,
+      "description": description,
+      "date": convertDateTimeToString(date)
+    });
 
     final response = await this
         .httpClient

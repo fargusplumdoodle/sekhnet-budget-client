@@ -25,7 +25,6 @@ abstract class ApiClient {
       apiHost = API_HOST;
       await this.storage.write(key: Constants.API_HOST, value: API_HOST);
     }
-    print("API HOST: $apiHost");
     return apiHost;
   }
 }

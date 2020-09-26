@@ -1,3 +1,4 @@
+import 'package:budget/globals.dart';
 import 'package:budget/model/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -42,8 +43,8 @@ class TransactionList extends StatelessWidget {
                 title: Text(transactions[index].getPrettyDescription()),
                 subtitle: Text(
                   showBudgetName
-                      ? '${transactions[index].date}  -  ${transactions[index].budget.name}'
-                      : transactions[index].date,
+                      ? '${convertDateTimeToString(transactions[index].date)}  -  ${transactions[index].budget.name}'
+                      : convertDateTimeToString(transactions[index].date),
                 ),
               ),
             ),

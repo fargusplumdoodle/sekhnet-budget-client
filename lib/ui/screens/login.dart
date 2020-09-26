@@ -15,11 +15,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     initLogin().then((loginRequired) => {
           if (!loginRequired)
-            {
-              SchedulerBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushReplacementNamed(context, Dashboard.routeName);
-              })
-            }
+            Navigator.popAndPushNamed(context, Dashboard.routeName)
         });
 
     return Scaffold(

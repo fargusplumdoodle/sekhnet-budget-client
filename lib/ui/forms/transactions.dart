@@ -99,7 +99,7 @@ class TransactionDateInput extends StatelessWidget {
         lastDate: DateTime(2077, 11, 3),
         initialDate: DateTime.now(),
         onDateSaved: (DateTime value) {
-          this._data.date = "${value.year}-${value.month}-${value.day}";
+          this._data.date = value;
         });
   }
 }
