@@ -14,8 +14,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     initLogin().then((loginRequired) => {
-          if (!loginRequired)
-            Navigator.popAndPushNamed(context, Dashboard.routeName)
+          if (!loginRequired) Navigator.pushNamed(context, Dashboard.routeName)
         });
 
     return Scaffold(

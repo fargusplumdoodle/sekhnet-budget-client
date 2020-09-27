@@ -3,41 +3,62 @@ import 'package:budget/model/budget.dart';
 import 'package:budget/ui/screens/budget_detail.dart';
 import 'package:flutter/material.dart';
 
-Widget BudgetDashboardWidget(List<BudgetModel> budgets) {
-  return Expanded(
-    child: GridView.builder(
-        itemCount: budgets.length,
-        shrinkWrap: true,
-        gridDelegate:
-            new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () => {
-              Navigator.pushNamed(context, BudgetDetail.routeName,
-                  arguments: budgets[index])
-            },
-            child: Card(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text('${budgets[index].name}',
-                        style: TextStyle(fontSize: 20)),
-                  ),
-                  Text('${budgets[index].getPrettyBalance(true)}\$',
-                      overflow: TextOverflow.fade,
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
-                ],
-              ),
-            ),
-          );
-        }),
-  );
+class BudgetOverview extends StatelessWidget {
+  final List<BudgetModel> budgets;
+
+  BudgetOverview(this.budgets);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        BudgetStatusCard(budgets),
+        Expanded(
+          child: PageView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              BudgetList(budgets),
+              BudgetList(budgets),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
 
-Widget StatusCard(List<BudgetModel> budgets) {
+Widget BudgetList(List<BudgetModel> budgets) {
+  return GridView.builder(
+      itemCount: budgets.length,
+      shrinkWrap: true,
+      gridDelegate:
+          new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+      itemBuilder: (BuildContext context, int index) {
+        return GestureDetector(
+          onTap: () => {
+            Navigator.pushNamed(context, BudgetDetail.routeName,
+                arguments: budgets[index])
+          },
+          child: Card(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text('${budgets[index].name}',
+                      style: TextStyle(fontSize: 20)),
+                ),
+                Text('${budgets[index].getPrettyBalance(true)}\$',
+                    overflow: TextOverflow.fade,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+              ],
+            ),
+          ),
+        );
+      });
+}
+
+Widget BudgetStatusCard(List<BudgetModel> budgets) {
   double debt = 0;
   double total = 0;
 
