@@ -46,6 +46,17 @@ class TransactionRequested extends TransactionEvent {
   List<Object> get props => throw [budgetID, maxTransactions];
 }
 
+class TransactionDateQueryRequested extends TransactionEvent {
+  final TransactionDateQuery data;
+
+  const TransactionDateQueryRequested({
+    @required this.data,
+  }) : assert(data != null);
+
+  @override
+  List<Object> get props => throw [data];
+}
+
 class TransferFundsRequested extends TransactionEvent {
   final TransferFundsData data;
 
@@ -108,7 +119,20 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
             await transactionRepository.transferFunds(event.data);
         yield TransactionLoadSuccess(transactions: transactions);
       } catch (e) {
-        print('Failed to update transaction:' + e.toString());
+        print('Failed to transfer funds:' + e.toString());
+        yield TransactionLoadFailure(e);
+      }
+    }
+
+    if (event is TransactionDateQueryRequested) {
+      yield TransactionLoadInProgress();
+
+      try {
+        final List<TransactionModel> transactions =
+            await transactionRepository.getTransactionsDateQuery(event.data);
+        yield TransactionLoadSuccess(transactions: transactions);
+      } catch (e) {
+        print('Failed to get transactions:' + e.toString());
         yield TransactionLoadFailure(e);
       }
     }

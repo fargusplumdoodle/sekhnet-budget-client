@@ -14,6 +14,12 @@ class TransferFundsData {
   BudgetModel toBudget;
 }
 
+class TransactionDateQuery {
+  DateTime start;
+  DateTime end;
+  BudgetModel budget;
+}
+
 class AddTransactionRepository {
   final AddTransactionApiClient addTransactionApiClient;
 
@@ -40,6 +46,11 @@ class AddTransactionRepository {
   Future<List<TransactionModel>> transferFunds(
       TransferFundsData transferData) async {
     return await addTransactionApiClient.transferFunds(transferData);
+  }
+
+  Future<List<TransactionModel>> getTransactionsDateQuery(
+      TransactionDateQuery query) async {
+    return await addTransactionApiClient.getTransactionsDateQuery(query);
   }
 }
 
@@ -164,5 +175,31 @@ class AddTransactionApiClient extends ApiClient {
     createdTransactions.add(TransactionModel.fromJSON(data));
 
     return createdTransactions;
+  }
+
+  Future<List<TransactionModel>> getTransactionsDateQuery(
+      TransactionDateQuery query) async {
+    var url = '${await getApiHost()}/transaction/?';
+
+    if (query.budget != null) {
+      url = url + "budget=${query.budget.id}&";
+    }
+    url = url + "date__gte=${convertDateTimeToString(query.start)}&";
+    url = url + "date__lte=${convertDateTimeToString(query.end)}&";
+
+    final response =
+        await this.httpClient.get(url, headers: await getHeaders());
+    if (response.statusCode != 200) {
+      throw Exception(
+          'error getting transaction: ${response.statusCode}: ${response.body}');
+    }
+    final data = jsonDecode(response.body) as List;
+
+    var transactionList = new List<TransactionModel>();
+    for (int i = 0; i < data.length; i++) {
+      transactionList.add(TransactionModel.fromJSON(data[i]));
+    }
+
+    return transactionList;
   }
 }

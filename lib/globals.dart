@@ -6,7 +6,13 @@ const STAGING_API_HOST = "http://10.0.0.85/api/v2";
 class Style {
   static const double h1 = 55;
   static const double h2 = 40;
+  static const double h3 = 30;
+  static const double h4 = 27;
+  static const double h5 = 20;
 }
+
+// amount we spend in a month
+var burnRate = 1800;
 
 List<BudgetModel> budgetStorage; // TODO: replace with actual database
 
