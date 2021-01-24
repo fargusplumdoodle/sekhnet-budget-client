@@ -1,7 +1,14 @@
 import 'model/budget.dart';
 
-const API_HOST = "http://10.0.0.84/api/v2";
+String API_HOST = "http://10.0.0.84/api/v2";
 const STAGING_API_HOST = "http://10.0.0.85/api/v2";
+
+const API_HOSTS = [
+  "http://10.0.0.84/api/v2",
+  "http://10.0.1.84/api/v2",
+  "http://10.0.0.85/api/v2",
+  "http://10.0.1.85/api/v2"
+];
 
 class Style {
   static const double h1 = 55;

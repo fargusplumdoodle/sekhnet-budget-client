@@ -1,6 +1,6 @@
 import 'package:budget/blocs/login.dart';
 import 'package:budget/repositories/login.dart';
-import 'package:budget/ui/widgets/login_form.dart';
+import 'package:budget/ui/forms/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

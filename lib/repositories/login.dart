@@ -39,17 +39,22 @@ class LoginApiClient extends ApiClient {
     final loginHeaders = {
       "Content-Type": "application/json",
     };
+    var data;
 
-    print(url);
     final response =
         await super.httpClient.post(url, body: body, headers: loginHeaders);
-    print(await super.storage.read(key: Constants.API_HOST));
+
+    try {
+      data = jsonDecode(response.body);
+    } catch (e) {
+      return LoginResponse(
+          errorMsg: "Invalid response from API", success: false);
+    }
+
     if (response.statusCode != 200) {
       return LoginResponse(
-          errorMsg: "Unable to login with provided credentials",
-          success: false);
+          errorMsg: data["non_field_errors"][0], success: false);
     }
-    final data = jsonDecode(response.body);
 
     await super.storage.write(key: Constants.TOKEN, value: data["token"]);
     await super.storage.write(key: Constants.USERNAME, value: username);
@@ -69,7 +74,7 @@ Future<bool> initLogin() async {
        login directly, return false
   2. Try and log in with existing credentials
     -> If it fails, send user to login screen, return true
-  3. If existing credentials dont exist, return true
+  3. If existing credentials don't exist, return true
 
    TODO: if web, always login
    */
@@ -100,9 +105,13 @@ Future<bool> initLogin() async {
   return true;
 }
 
-void logout(BuildContext context) {
+void logout(BuildContext context) async {
   final storage = new FlutterSecureStorage();
-  storage.deleteAll();
+  await storage.deleteAll();
+  await storage.delete(key: Constants.USERNAME);
+  await storage.delete(key: Constants.PASSWORD);
+  String apiHost = await storage.read(key: Constants.USERNAME);
+  print(apiHost);
   SchedulerBinding.instance.addPostFrameCallback((_) {
     Navigator.pushReplacementNamed(context, LoginScreen.routeName);
   });

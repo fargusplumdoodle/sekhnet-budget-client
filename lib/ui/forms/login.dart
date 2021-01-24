@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import '../../globals.dart';
 
 class LoginFormData {
   String username;
@@ -58,6 +61,7 @@ class _LoginFormState extends State<LoginForm> {
               this._data.password = value;
             },
           ),
+          APISwitchDropdown(),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: RaisedButton(
@@ -70,5 +74,52 @@ class _LoginFormState extends State<LoginForm> {
                 child: Text("Login")),
           )
         ]));
+  }
+}
+
+class APISwitchDropdown extends StatefulWidget {
+  APISwitchDropdown();
+  @override
+  _APISwitchDropdownState createState() => _APISwitchDropdownState();
+}
+
+class _APISwitchDropdownState extends State<APISwitchDropdown> {
+  final storage = new FlutterSecureStorage();
+  String dropDownValue = API_HOSTS[0];
+
+  _APISwitchDropdownState();
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton(
+        value: dropDownValue,
+        hint: Text("API Host"),
+        icon: Icon(Icons.arrow_downward),
+        iconSize: 24,
+        elevation: 16,
+        style: TextStyle(color: Colors.tealAccent),
+        underline: Container(
+          height: 4,
+          color: Colors.tealAccent,
+        ),
+        isExpanded: true,
+        onChanged: onChanged,
+        items: API_HOSTS.map<DropdownMenuItem<String>>((String host) {
+          return DropdownMenuItem(
+              value: host,
+              child: Center(
+                child: Text(
+                  host,
+                  style: TextStyle(fontSize: 20),
+                ),
+              ));
+        }).toList());
+  }
+
+  void onChanged(String newValue) async {
+    setState(() {
+      dropDownValue = newValue;
+    });
+    await this.storage.write(key: Constants.API_HOST, value: newValue);
   }
 }
